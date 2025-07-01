@@ -8,7 +8,7 @@ This is a simple PHP-based chat web application that allows users to register, l
 4.One-to-one chat functionality with message history
 5.Responsive UI using Bootstrap 5
 
-****Folder Structure
+**Folder Structure**
 **Setup Instructions**
 1.Clone or copy the project files to your web server directory (e.g., chatbot).
 2.Create a MySQL database named mydb.
