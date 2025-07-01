@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 $receiver = $user->getUserById($receiver_id);
 $messages = $user->getConversation($sender_id, $receiver_id);
+$otherUsers = $user->getOtherUsers($sender_id);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,21 +53,21 @@ $messages = $user->getConversation($sender_id, $receiver_id);
     }
 
     .left-panel {
-      width: 40%;
+      width: 35%;
       background: linear-gradient(135deg, #8e2de2, #4a00e0);
       color: white;
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
+      padding: 20px;
+      overflow-y: auto;
     }
 
-    .left-panel h1 {
-      font-size: 2rem;
+    .user-list {
+      flex-grow: 1;
     }
 
     .right-panel {
-      width: 60%;
+      width: 65%;
       padding: 40px;
       background-color: #ffffff;
       display: flex;
@@ -145,16 +146,67 @@ $messages = $user->getConversation($sender_id, $receiver_id);
     .form-control {
       border-radius: 25px;
     }
+
+    .user-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .user-link:hover {
+      text-decoration: underline;
+    }
+
+    .user-link img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .user-name {
+      font-weight: bold;
+    }
+
+    .user-email {
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .dashboard-btn {
+      margin-top: 20px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
   <div class="chat-wrapper">
+
+    <!-- Left Panel -->
     <div class="left-panel">
-      <h1>Say Hello!</h1>
-      <p>Chat with <strong><?= htmlspecialchars($receiver['name']) ?></strong></p>
-      <a href="dashboard.php" class="btn btn-light mt-3">← Back to Dashboard</a>
+      <div class="user-list">
+        <h4>Chats</h4>
+        <?php foreach ($otherUsers as $chatUser): ?>
+          <a href="chat.php?user_id=<?= $chatUser['id'] ?>" class="user-link">
+            <img src="uploads/<?= htmlspecialchars($chatUser['profile_picture']) ?>" alt="Profile">
+            <div>
+              <div class="user-name"><?= htmlspecialchars($chatUser['name']) ?></div>
+              <div class="user-email"><?= htmlspecialchars($chatUser['email']) ?></div>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      </div>
+
+      
+      <div class="dashboard-btn">
+        <a href="dashboard.php" class="btn btn-light w-100">← Back to Dashboard</a>
+      </div>
     </div>
 
+    <!-- Right Panel -->
     <div class="right-panel">
       <div class="chat-header">
         <img src="uploads/<?= htmlspecialchars($receiver['profile_picture']) ?>" alt="Profile">
